@@ -126,6 +126,12 @@ AC_TYPE_SIGNAL
 
 # Checks for configure options
 
+# --disable-docs
+AC_ARG_ENABLE(docs,
+              AC_HELP_STRING([--disable-docs],
+                             [do not build documentation]))
+AM_CONDITIONAL([BUILD_DOCS], [test "x$enable_docs" != "xno"])
+
 # --enable-debug
 m4_define(debug_default,
           m4_if(m4_eval(fribidi_minor_version() % 2),1,yes,no))

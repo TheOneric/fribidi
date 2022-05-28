@@ -20,11 +20,14 @@ includevpath += :$(top_builddir)/lib:$(top_srcdir)/lib
 # The las two lines are not functions, we don't want them here.
 inst_symbols += $(shell sed '$$d' $(top_srcdir)/lib/fribidi.def | sed '$$d')
 
+if BUILD_DOCS
 dist_man_MANS += $(inst_symbols:=.3)
 dist_noinst_MANS += $(noinst_symbols:=.3)
+endif
+
 EXTRA_DIST += c2man.stamp
 MOSTLYCLEANFILES += c2man.stamp.tmp
-MAINTAINERCLEANFILES += $(man3) c2man.stamp
+MAINTAINERCLEANFILES += $(inst_symbols:=.3) $(noinst_symbols:=.3) c2man.stamp
 
 man3 = $(dist_man_MANS) $(dist_noinst_MANS)
 
@@ -35,6 +38,7 @@ C2MANFLAGS = $(includepath) \
 
 VPATH += $(includevpath)
 
+if BUILD_DOCS
 c2man.stamp: $(headers)
 	@$(RM) $@.tmp
 	@touch $@.tmp
@@ -51,5 +55,6 @@ $(man3): c2man.stamp
 		$(MAKE) $(AM_MAKEFLAGS) $<;\
 	fi
 	@touch $@
+endif
 
 -include $(top_srcdir)/git.mk
